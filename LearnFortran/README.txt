@@ -1,0 +1,1 @@
+C:\AppsForXY\GIT\Git\bin\bash.exe
