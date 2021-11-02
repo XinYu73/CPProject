@@ -9,4 +9,5 @@ program test_sgesv
     print *,'b=',b
     call sgesv(3,1,a,3,v,b,3,iflag)
     print *,'solve=',b
+    print *,'solve=',v
 end program test_sgesv
