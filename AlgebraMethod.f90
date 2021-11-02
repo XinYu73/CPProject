@@ -9,42 +9,40 @@ module AlgebraMethod
     complex,PARAMETER:: sigma=0.1-i * omega *epsilon
     REAL,PARAMETER:: mu = 4 * pi * 10**(-7.0)
     COMPLEX :: k=sqrt(i*omega*mu*sigma)
+    real::x,y,z
     !!!!!!!!!!
     contains
-    subroutine GetEx(x,y,z,Ex)
+    subroutine GetPosition(arg1, arg2 , arg3)
+        implicit none
+        real,intent(in) :: arg1
+        real,intent(in) ::  arg2
+        real,intent(in) ::  arg3
+        x=arg1
+        y=arg2
+        z=arg3
+    end subroutine GetPosition
+    subroutine GetEx(Ex)
     implicit none
-    REAL,intent(in) :: x
-    REAL,intent(in) :: y
-    REAL,intent(in) :: z
     REAL :: r 
     COMPLEX,INTENT(OUT)::Ex
     r=sqrt( x**2+y**2+z**2)
     Ex = ( Mz / (4 * pi)) * i *  omega *  mu * (y * exp(i *  k *  r) /  r**3) * (i *  k *  r - 1)
     end subroutine GetEx
     !!!!!!
-    subroutine GetEy(x,y,z,Ey)
+    subroutine GetEy(Ey)
         implicit none
-        REAL,intent(in) :: x
-        REAL,intent(in) :: y
-        REAL,intent(in) :: z
         REAL :: r 
         COMPLEX,INTENT(OUT)::Ey
         r=sqrt( x**2+y**2+z**2)
         Ey = -( Mz / (4 * pi)) * i *  omega *  mu * ( x * exp(i *  k *  r) /  r**3) * (i *  k *  r - 1)
     end subroutine GetEy
     !!!!!
-    subroutine GetEz(x,y,z,Ez)
-        REAL,intent(in) :: x
-        REAL,intent(in) :: y
-        REAL,intent(in) :: z
+    subroutine GetEz(Ez)
         COMPLEX,INTENT(OUT)::Ez
         Ez=0*x*y*z
     end subroutine GetEz
     !!!
-    subroutine GetH(x,y,z,Hx,Hy,Hz)
-        REAL,intent(in) :: x
-        REAL,intent(in) :: y
-        REAL,intent(in) :: z
+    subroutine GetH(Hx,Hy,Hz)
         REAL :: r 
         COMPLEX,INTENT(OUT)::Hx,Hy,Hz
         r=sqrt( x**2+y**2+z**2)

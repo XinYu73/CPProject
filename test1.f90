@@ -1,16 +1,9 @@
-program namee
+program name
     use MyModule
-    use AlgebraMethod
     implicit none
-    REAL :: x,y,z
-    COMPLEX :: Ex,Ey,Ez,Hx,Hy,Hz
+    REAL :: x1,y1,z1
     WRITE(*,*)"Enter the position"
-    READ(*,*)x,y,z
-    CALL GetEx(x,y,z,Ex)
-    CALL GetEy(x,y,z,Ey)
-    CALL GetEz(x,y,z,Ez)
-    WRITE(*,*)"Ex:  ",Ex,"Ey:   ",Ey,"Ez    ",Ez
-    CALL GetH(x,y,z,Hx,Hy,Hz)
-    WRITE(*,*)"H:",Hx," ",Hy," ",Hz
+    READ(*,*)x1,y1,z1
+    CALL GetPosition(x1,y1,z1)
     CALL spline()
-end program namee
+end program name

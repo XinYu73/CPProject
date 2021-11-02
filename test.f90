@@ -1,13 +1,15 @@
-program test_sgesv
+program name
+    use AlgebraMethod
     implicit none
-    real :: a(3,3),b(3)
-    integer :: v(3),iflag
-    external sgesv
-    a=reshape([2.0,0.0,0.0,0.0,3.0,0.0,0.0,0.0,4.0],[3,3])
-    b=[998.0,999.0,1000.0]
-    print *,'a=',a
-    print *,'b=',b
-    call sgesv(3,1,a,3,v,b,3,iflag)
-    print *,'solve=',b
-    print *,'solve=',v
-end program test_sgesv
+    REAL :: x1,y1,z1
+    COMPLEX :: Ex,Ey,Ez,Hx,Hy,Hz
+    WRITE(*,*)"Enter the position"
+    READ(*,*)x1,y1,z1
+    CALL GetPosition(x1,y1,z1)
+    CALL GetEx(Ex)
+    CALL GetEy(Ey)
+    CALL GetEz(Ez)
+    WRITE(*,*)"E:",Ex,Ey,Ez
+    CALL GetH(Hx,Hy,Hz)
+    WRITE(*,*)"H:",Hx,Hy,Hz
+end program name

@@ -8,27 +8,37 @@ module MyModule
     real,PARAMETER::epsilon=8.854*10**(-12.0)
     complex,PARAMETER:: sigma=0.1-i * omega *epsilon
     REAL,PARAMETER:: mu = 4 * pi * 10**(-7.0)
+    real::x,y,z
     !!!!
     contains
     !test Function
-    complex function cubic(arg,j) result(retval)
+    subroutine GetPosition(arg1, arg2 , arg3)
+        implicit none
+        real,intent(in) :: arg1
+        real,intent(in) ::  arg2
+        real,intent(in) ::  arg3
+        x=arg1
+        y=arg2
+        z=arg3
+    end subroutine GetPosition
+    !!!!
+    complex function cubic(arg,jj) result(retval)
     implicit none
-    INTEGER,INTENT(IN):: j
+    INTEGER,INTENT(IN):: jj
     complex,INTENT(IN) :: arg
     complex::kz
     real:: rho
-    real::x,y,z
-    x=0.5
-    y=0.0
-    z=1.0
-    SELECT CASE (j)
+    rho = sqrt(x**2+y**2)
+    kz= sqrt(i*omega*mu*sigma-arg**2)
+    SELECT CASE (jj)
     case (0)
         retval = arg**3+1.0
     case (1) ! E phi
-
-        rho = sqrt(x**2+y**2)
-        kz=sqrt(i*omega*mu*sigma-arg**2)
         retval = -(omega *mu*Mz/(4.0*pi))*(BESSEL_JN(1,real(arg*rho))*arg**2*exp(i*abs(z)*kz))/kz
+    case (2)
+        retval = (Mz/4*pi)*BESSEL_JN(1,real(arg*rho))*arg**2*(abs(z)/z)*exp(i*abs(z)*kz)
+    case (3)
+        retval = (Mz/4*pi)*BESSEL_JN(0,real(arg*rho))*i*arg**3*exp(i*abs(z)*kz)/kz
     case DEFAULT
         WRITE(*,*)"Wrong day" 
     end select
@@ -37,7 +47,7 @@ module MyModule
     subroutine spline()
         implicit none
         external sgesv
-        INTEGER ,PARAMETER :: N = 5000
+        INTEGER ,PARAMETER :: N = 10000
         complex,DIMENSION(N,4)::Cmatrix
         INTEGER :: iter
         integer :: v(N+1),iflag
@@ -53,7 +63,9 @@ module MyModule
         !
         real::hj
         real::a,b ! start and end point of the intval
-        INTEGER::caseSelect=1
+        INTEGER::caseSelect
+        WRITE(*,*)"x**3 : 0 , E phi : 1 , H rho : 2, Hz : 3"
+        READ(*,*)caseSelect
         WRITE(*,*)"Enter the interval a,b ,b should be greater than a"
         READ(*,*)a,b
         hj=(b-a)/real(N) ! 均匀采点
@@ -103,9 +115,9 @@ module MyModule
             Integate=Integate+(Cmatrix(iter,4)*(Xd(iter+1)**4-Xd(iter)**4))/4.0+(Cmatrix(iter,3)*(Xd(iter+1)**3-Xd(iter)**3))/3.0 &
                     +(Cmatrix(iter,2)*(Xd(iter+1)**2-Xd(iter)**2))/2.0+(Cmatrix(iter,1)*(Xd(iter+1)-Xd(iter)))
         end do
-        WRITE(*,*) "Result:     ",Integate
+        WRITE(*,*) "Spline Result:     ",Integate
     
-        !GaussLegendre
+        !GaussLegendre Combined with Spline
         Integate=0
         do iter = 1,N
             do initer = 1,5
@@ -116,6 +128,16 @@ module MyModule
                         +(Cmatrix(iter,1)))
             end do
         end do
-        WRITE(*,*) "Result:     ",Integate
+        WRITE(*,*) "GaussLegendre Combined with Spline Result:     ",Integate
+
+        !GaussLegendre
+        Integate = 0
+        do iter =  1 ,N
+            do initer =1,5
+                temp=(Xd(iter+1)+Xd(iter))/2.0+(Xd(iter+1)-Xd(iter))*t(initer)/2.0
+                Integate = Integate + ((Xd(iter+1)-Xd(iter))/2.0)*W(initer)*cubic(temp,caseSelect)
+            end do
+        end do
+        WRITE(*,*) "GaussLegendre  Result:     ",Integate
     end subroutine spline
 end module MyModule
