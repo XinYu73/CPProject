@@ -95,9 +95,10 @@ module Integrate
         Dd(N+1)= Dd(N)
         !WRITE(*,*)Xd
         !WRITE(*,*)Dd
-        !WRITE(*,*)Mmatrix(:,:)
+        WRITE(*,*)Mmatrix(1,1:5)
         !WRITE(*,*)Dd(:)
-        call cgesv(N+1,1,Mmatrix,N+1,v,Dd,N+1,iflag)
+        call sgesv(N+1,1,Mmatrix,N+1,v,Dd,N+1,iflag)
+        WRITE(*,*)Mmatrix(1,1:5)
         WRITE(*,*)iflag    
         ! WRITE(*,*)Dd(:)   ! Dd 现在是spline所需的插值
         !********
