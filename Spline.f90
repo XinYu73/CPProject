@@ -35,9 +35,9 @@ module MyModule
         retval = arg**3+1.0
     case (1) ! E phi
         retval = -(omega *mu*Mz/(4.0*pi))*(BESSEL_JN(1,real(arg*rho))*arg**2*exp(i*abs(z)*kz))/kz
-    case (2)
+    case (2) ! H rho
         retval = (Mz/4*pi)*BESSEL_JN(1,real(arg*rho))*arg**2*(abs(z)/z)*exp(i*abs(z)*kz)
-    case (3)
+    case (3) ! H z
         retval = (Mz/4*pi)*BESSEL_JN(0,real(arg*rho))*i*arg**3*exp(i*abs(z)*kz)/kz
     case DEFAULT
         WRITE(*,*)"Wrong day" 
@@ -95,9 +95,9 @@ module MyModule
         Dd(N+1)= Dd(N)
         !WRITE(*,*)Xd
         !WRITE(*,*)Dd
-        !WRITE(*,*)Mmatrix(1,:)
-        call sgesv(N+1,1,Mmatrix,N+1,v,Dd,N+1,iflag)
-        !WRITE(*,*)Dd   ! Dd 现在是spline所需的插值
+        WRITE(*,*)Mmatrix(1,1)
+        call cgesv(N+1,1,Mmatrix,N+1,v,Dd,N+1,iflag)
+        WRITE(*,*)Dd(1:10)   ! Dd 现在是spline所需的插值
         !********
         do iter  = 1,N
             Cmatrix(iter,4)=(Dd(iter+1)-Dd(iter))/(6.0*hj)
