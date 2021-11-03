@@ -4,9 +4,9 @@ module MyModule
     REAL,PARAMETER:: pi=3.14159265359
     REAL,PARAMETER:: Mz =1 !1A m**2
     REAL,PARAMETER:: omega =2 * pi * 20000
-    COMPLEX,PARAMETER :: i=(0,1)
+    DOUBLE COMPLEX,PARAMETER :: i=(0,1)
     real,PARAMETER::epsilon=8.854*10**(-12.0)
-    complex,PARAMETER:: sigma=0.1-i * omega *epsilon
+    DOUBLE complex,PARAMETER:: sigma=0.1-i * omega *epsilon
     REAL,PARAMETER:: mu = 4 * pi * 10**(-7.0)
     real::x,y,z
     !!!!
@@ -22,11 +22,11 @@ module MyModule
         z=arg3
     end subroutine GetPosition
     !!!!
-    complex function cubic(arg,jj) result(retval)
+    DOUBLE complex function cubic(arg,jj) result(retval)
     implicit none
     INTEGER,INTENT(IN):: jj
-    complex,INTENT(IN) :: arg
-    complex::kz
+    DOUBLE complex,INTENT(IN) :: arg
+    DOUBLE complex::kz
     real:: rho
     rho = sqrt(x**2+y**2)
     kz= sqrt(i*omega*mu*sigma-arg**2)
@@ -47,16 +47,16 @@ module MyModule
     subroutine spline()
         implicit none
         external sgesv
-        INTEGER ,PARAMETER :: N = 10000
-        complex,DIMENSION(N,4)::Cmatrix
+        INTEGER ,PARAMETER :: N = 4000
+        DOUBLE complex,DIMENSION(N,4)::Cmatrix
         INTEGER :: iter
         integer :: v(N+1),iflag
-        complex::Integate=0
-        complex,DIMENSION(N+1) :: Dd = 0.0
-        complex,DIMENSION(N+1) :: Xd = 0.0
-        complex,DIMENSION(N+1,N+1) :: Mmatrix = 0.0
+        DOUBLE complex::Integate=0
+        DOUBLE complex,DIMENSION(N+1) :: Dd = 0.0
+        DOUBLE complex,DIMENSION(N+1) :: Xd = 0.0
+        DOUBLE complex,DIMENSION(N+1,N+1) :: Mmatrix = 0.0
         !
-        complex::temp
+        DOUBLE complex::temp
         real,DIMENSION(5)::t=[-0.9061798459,0.9061798459,0.5384693101,-0.5384693101,0.0]
         real,DIMENSION(5)::W=[0.2369268851,0.2369268851,0.4786286705,0.4786286705,0.568888889]
         INTEGER :: initer
@@ -95,9 +95,10 @@ module MyModule
         Dd(N+1)= Dd(N)
         !WRITE(*,*)Xd
         !WRITE(*,*)Dd
-        WRITE(*,*)Mmatrix(1,1)
+        !WRITE(*,*)Mmatrix(:,:)
+        WRITE(*,*)Dd(:)
         call cgesv(N+1,1,Mmatrix,N+1,v,Dd,N+1,iflag)
-        WRITE(*,*)Dd(1:10)   ! Dd 现在是spline所需的插值
+        WRITE(*,*)Dd(:)   ! Dd 现在是spline所需的插值
         !********
         do iter  = 1,N
             Cmatrix(iter,4)=(Dd(iter+1)-Dd(iter))/(6.0*hj)
