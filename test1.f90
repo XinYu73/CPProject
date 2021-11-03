@@ -1,5 +1,5 @@
 program name
-    use MyModule
+    use Integrate
     implicit none
     REAL(4) :: x1,y1,z1
     WRITE(*,*)"Enter the position"

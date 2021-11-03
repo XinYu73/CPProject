@@ -1,4 +1,4 @@
-module MyModule
+module Integrate
     implicit none
     save
     REAL,PARAMETER:: pi=3.14159265359
@@ -87,7 +87,7 @@ module MyModule
         end do
         !initializing done
         !initializing vector for Mj
-        do iter = 2, N
+        do iter = 2,N
             Dd(iter) = 6.0*(cubic(Xd(iter+1),caseSelect)-cubic(Xd(iter),caseSelect))/(2.0*hj) &
                         -6.0*(cubic(Xd(iter),caseSelect)-cubic(Xd(iter-1),caseSelect))/(2.0*hj)
         end do
@@ -96,9 +96,10 @@ module MyModule
         !WRITE(*,*)Xd
         !WRITE(*,*)Dd
         !WRITE(*,*)Mmatrix(:,:)
-        WRITE(*,*)Dd(:)
+        !WRITE(*,*)Dd(:)
         call cgesv(N+1,1,Mmatrix,N+1,v,Dd,N+1,iflag)
-        WRITE(*,*)Dd(:)   ! Dd 现在是spline所需的插值
+        WRITE(*,*)iflag    
+        ! WRITE(*,*)Dd(:)   ! Dd 现在是spline所需的插值
         !********
         do iter  = 1,N
             Cmatrix(iter,4)=(Dd(iter+1)-Dd(iter))/(6.0*hj)
@@ -141,4 +142,4 @@ module MyModule
         end do
         WRITE(*,*) "GaussLegendre  Result:     ",Integate
     end subroutine spline
-end module MyModule
+end module Integrate
