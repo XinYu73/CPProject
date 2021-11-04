@@ -1,5 +1,5 @@
 program name
-    use Integrate
+    use integrate
     implicit none
     REAL(4) :: x1,y1,z1
     WRITE(*,*)"Enter the position"
