@@ -36,9 +36,9 @@ module Integrate
     case (1) ! E phi
         retval = -(omega *mu*Mz/(4.0*pi))*(BESSEL_JN(1,real(arg*rho))*arg**2*exp(i*abs(z)*kz))/kz
     case (2) ! H rho
-        retval = (Mz/4*pi)*BESSEL_JN(1,real(arg*rho))*arg**2*(abs(z)/z)*exp(i*abs(z)*kz)
+        retval = 0.1*(Mz/4*pi)*BESSEL_JN(1,real(arg*rho))*arg**2*(abs(z)/z)*exp(i*abs(z)*kz)
     case (3) ! H z
-        retval = (Mz/4*pi)*BESSEL_JN(0,real(arg*rho))*i*arg**3*exp(i*abs(z)*kz)/kz
+        retval = 0.1*(Mz/4*pi)*BESSEL_JN(0,real(arg*rho))*i*arg**3*exp(i*abs(z)*kz)/kz
     case DEFAULT
         WRITE(*,*)"Wrong day" 
     end select
