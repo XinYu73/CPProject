@@ -3,7 +3,7 @@ module Integrate
     save
     REAL,PARAMETER:: pi=3.14159265359
     REAL,PARAMETER:: Mz =1 !1A m**2
-    REAL,PARAMETER:: omega =2 * pi * 20000
+    REAL,PARAMETER:: omega =2 * pi * 20000000
     DOUBLE COMPLEX,PARAMETER :: i=(0,1)
     real,PARAMETER::epsilon=8.854*10**(-12.0)
     DOUBLE complex,PARAMETER:: sigma=0.1-i * omega *epsilon
